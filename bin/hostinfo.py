@@ -19,6 +19,7 @@ class hostaddr(object):
 		ip = socket.gethostbyname(socket.gethostname())
 		if ip.startswith("127.") and os.name != "nt":
 			interfaces = [
+				"vmbr0",
 				"eth0",
 				"eth1",
 				"eth2",
