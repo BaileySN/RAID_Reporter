@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -23,13 +23,13 @@ class emailsend(object):
         msg['To'] = emc.empfaenger
 
         # Create the body of the message (a plain-text and an HTML version).
-        text = "Caution! \nRAID Error detected by Server \nHostname = '%s' \nIP-Address = '%s' \nSystem message: \n'%s'" % (hostname, ipaddr, report)
+        text = "Caution! \nRAID Error detected by Server \nHostname = %s \nIP-Address = %s \nSystem message: \n '%s' " % (hostname, ipaddr, report)
         html = """\
 		<html>
 		<head></head>
 		<body>
 			<p>Caution!<br />
-			RAID Error detected by Server<br />Hostname = <span style="color:red">'%s'</span><br />IP-Address = <span style="color:red">'%s'</span><br />
+			RAID Error detected by Server<br />Hostname = <span style="color:red"> %s </span><br />IP-Address = <span style="color:red"> %s </span><br />
 			System message:<br />
 			'%s'
 			</p>

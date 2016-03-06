@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 ###########################################################################################################
-# HW RAID Reporter                                                                                        #
+# RAID Reporter                                                                                           #
 # Copyright (C) [2015]  [Guenter Bailey]                                                                  #
 #                                                                                                         #
 # This program is free software;                                                                          #
