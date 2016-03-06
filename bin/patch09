@@ -1,0 +1,8 @@
+
+class mode:
+    """
+    Send Notification if only VERIFYING RAID Array
+    yes or y => Send only Notify if RAID or ARRAY Failure
+    no or n => Send Notify for all errors
+    """
+    silent = "yes"

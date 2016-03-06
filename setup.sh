@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ###########################################################################################################
-# HW RAID Reporter v$ver                                                                                   #
+# RAID Reporter                                                                                           #
 # Copyright (C) [2015]  [Guenter Bailey]                                                                  #
 #                                                                                                         #
 # This program is free software;                                                                          #
@@ -16,15 +16,14 @@
 # if not, see <http://www.gnu.org/licenses/>.                                                             #
 ###########################################################################################################
 cmd="$1"
-crontime="$2"
-ver="0.8"
+ver="0.9"
 echo """
 ##############################################################################################
-#                                  HW Raid Reporter v$ver                                     #
+#                                   Raid Reporter v$ver                                       #
 #--------------------------------------------------------------------------------------------#
-#                                         by BS @2015                                        #
+#                                       by BS @2015                                          #
 #--------------------------------------------------------------------------------------------#
-#               this thool set the hw_raid_reporter and a cronjob in /etc/crontab            #
+#                  this tool help by the configuration from RAID Reporter                    #
 ##############################################################################################
     """
 sleep 1
@@ -34,12 +33,13 @@ if [ "$(id -u)" != "0" ]; then
 fi
 echo """
 ###########################################################################################
-# HW RAID Reporter v$ver  Copyright (C) 2015  Guenter Bailey                               #
+# RAID Reporter v$ver  Copyright (C) 2015  Guenter Bailey                                  #
 # This program comes with ABSOLUTELY NO WARRANTY.                                         #
 # This is free software, and you are welcome to redistribute it under certain conditions. #
 ###########################################################################################
     """
 if [ "$cmd" = "tw" ] || [ "$cmd" = "mpt" ]; then
+    crontime="$2"
     if [ $crontime -ge 0 ]; then
         echo "create cronjob for checking RAID Health every $crontime"
         echo "0 */$crontime * * *   root	cd $PWD &&python reporter.py --$cmd " >> /etc/crontab
@@ -60,11 +60,30 @@ if [ "$cmd" = "tw" ] || [ "$cmd" = "mpt" ]; then
         echo "time to low"
         echo "the integer must greater than 0"
     fi
+elif [ "$cmd" = "update" ]; then
+    echo "Patch config for Version $ver"
+    if ! grep "silent" "./conf/config.py"; then
+        if ! grep "mode" "./conf/config.py"; then
+            echo "modify config for Version 0.9"
+            cat ./bin/patch09 >> ./conf/config.py
+            echo "patch09 added"
+        else
+            echo "hmm...,"
+            echo "mode exists but i can't found the option silent"
+            echo "please add the options from bin/patch09 manually in conf/config.py"
+        fi
+
+    else
+        echo "patch for Version 0.9 exists"
+        echo "nothing to do"
+    fi
 else
     echo """
     start setup.sh with option tw or mpt and checktime in hour
+    or for update
+    sh setup.sh update
     -------------------------------------------------------------
-    for example:
+    example:
 
     for 3ware RAID controllers (tool tw_cli)
     sh setup.sh tw 3
@@ -79,6 +98,7 @@ else
     -------------------------------------------------------------
     the tool tw_cli or mpt-status must run from the commandline
     in example:
-    root@vm1: tw_cli or mpt-status
+
+    root@host#: tw_cli or mpt-status
         """
 fi
