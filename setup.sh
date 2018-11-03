@@ -68,7 +68,6 @@ elif [ "$cmd" = "update" ]; then
             cat ./bin/patch09 >> ./conf/config.py
             echo "patch09 added"
         else
-            echo "hmm...,"
             echo "mode exists but i can't found the option silent"
             echo "please add the options from bin/patch09 manually in conf/config.py"
         fi
