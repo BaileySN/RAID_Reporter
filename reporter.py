@@ -16,18 +16,20 @@
 # You should have received a copy of the GNU General Public License along with this program;              #
 # if not, see <http://www.gnu.org/licenses/>.                                                             #
 ###########################################################################################################
-
 from re import search
 from sys import exit
 from os.path import isfile
 from optparse import OptionParser
 from subprocess import Popen, PIPE
-from bin import mailsend
+from bin.mailsend import EmailNotify
 from conf import mode
+email = EmailNotify()
+
 
 def testmail(msg):
-    mailsend.emailsend(msg)
+    email.send(report=msg)
     print("sending Testmail...")
+
 
 def wherecmd(cmds):
     cmd1 = ''
@@ -38,7 +40,8 @@ def wherecmd(cmds):
 
     c1 = ['which', cmd1]
     p1 = Popen(c1, stdout=PIPE)
-    return p1.communicate()[0].replace('\n','')
+    return p1.communicate()[0].replace('\n', '')
+
 
 def check_controller(type):
     ret = True
@@ -49,7 +52,7 @@ def check_controller(type):
     drive = {}
 
     if type == 'mpt':
-        cmd = [ wherecmd("mpt"), '-s']
+        cmd = [wherecmd("mpt"), '-s']
         # cmd = [ '/usr/sbin/mpt-status', '-s' ]
         array = {'regex': '^log_id$',
                  'pos': 2,
@@ -58,7 +61,7 @@ def check_controller(type):
                  'pos': 2,
                  'string': 'ONLINE'}
     elif type == 'tw':
-        cmd = [ wherecmd("tw"), 'info']
+        cmd = [wherecmd("tw"), 'info']
         # cmd = [ '/usr/bin/tw_cli', 'info' ]
         contr = {'regex': '^c\d+$'}
         array = {'regex': '^u\d+$',
@@ -100,21 +103,22 @@ def check_controller(type):
                         if search(array['regex'], v[0]) and v[array['pos']] != "VERIFYING":
                             msg = ("Array failure: \n\t%s" % '\t'.join(v))
                             print(msg)
-                            mailsend.emailsend(msg)
+                            email.send(report=msg)
                             ret = False
                 else:
                     if search(array['regex'], v[0]) and v[array['pos']] != array['string']:
                         msg = ("Array failure: \n\t%s" % '\t'.join(v))
                         print(msg)
-                        mailsend.emailsend(msg)
+                        email.send(report=msg)
                         ret = False
                 # Drive check.
                 if search(drive['regex'], v[0]) and v[drive['pos']] != drive['string']:
                     msg = ("Drive failure: \n\t%s" % '\t'.join(v))
                     print(msg)
-                    mailsend.emailsend(msg)
+                    email.send(report=msg)
                     ret = False
     return ret
+
 
 def main():
     usage = "usage: %prog options"
@@ -147,6 +151,7 @@ def main():
 
     if fail:
         exit(1)
+
 
 if __name__ == "__main__":
     main()
