@@ -16,7 +16,7 @@
 # if not, see <http://www.gnu.org/licenses/>.                                                             #
 ###########################################################################################################
 cmd="$1"
-ver="0.10"
+ver="0.11"
 echo """
 ##############################################################################################
 #                                   Raid Reporter v$ver                                       #
@@ -76,6 +76,7 @@ elif [ "$cmd" = "update" ]; then
         echo "patch for Version 0.9 exists"
         echo "nothing to do"
     fi
+    echo "please compare config.py.orig with config.py"
 else
     echo """
     start setup.sh with option tw or mpt and checktime in hour

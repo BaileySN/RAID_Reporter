@@ -8,6 +8,7 @@ class emailconfig:
     smtppasswort = ""
     smtpbenutzer = ""
     ssl = True
+    starttls = False
 
 
 class mode:
